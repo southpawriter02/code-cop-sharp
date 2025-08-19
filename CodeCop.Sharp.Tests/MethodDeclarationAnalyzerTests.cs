@@ -8,21 +8,38 @@ namespace CodeCop.Sharp.Tests
     public class MethodDeclarationAnalyzerTests
     {
         [Fact]
-        public async Task MethodDeclaration_ShouldTriggerDiagnostic()
+        public async Task MethodName_ShouldNotBePascalCase_ShouldTriggerDiagnostic()
         {
             var testCode = @"
 namespace MyCode
 {
     public class MyClass
     {
-        public void {|#0:MyMethod|}()
+        public void {|#0:myMethod|}()
         {
         }
     }
 }";
 
-            var expected = VerifyCS.Diagnostic("CCS0001").WithLocation(0).WithArguments("MyMethod");
+            var expected = VerifyCS.Diagnostic("CCS0001").WithLocation(0).WithArguments("myMethod");
             await VerifyCS.VerifyAnalyzerAsync(testCode, expected);
+        }
+
+        [Fact]
+        public async Task MethodName_ShouldBePascalCase_ShouldNotTriggerDiagnostic()
+        {
+            var testCode = @"
+namespace MyCode
+{
+    public class MyClass
+    {
+        public void MyMethod()
+        {
+        }
+    }
+}";
+
+            await VerifyCS.VerifyAnalyzerAsync(testCode);
         }
     }
 }

@@ -11,9 +11,9 @@ namespace CodeCop.Sharp
     {
         public const string DiagnosticId = "CCS0001";
 
-        private static readonly LocalizableString Title = "Method Declaration Analyzer";
-        private static readonly LocalizableString MessageFormat = "Method '{0}' is flagged by the analyzer";
-        private static readonly LocalizableString Description = "This is a sample analyzer that flags all method declarations.";
+        private static readonly LocalizableString Title = "Method name should be in PascalCase";
+        private static readonly LocalizableString MessageFormat = "Method name '{0}' should be in PascalCase";
+        private static readonly LocalizableString Description = "Method names should be in PascalCase.";
         private const string Category = "Naming";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
@@ -31,6 +31,11 @@ namespace CodeCop.Sharp
         {
             var methodDeclaration = (MethodDeclarationSyntax)context.Node;
             var methodName = methodDeclaration.Identifier.ValueText;
+
+            if (string.IsNullOrEmpty(methodName) || !char.IsLower(methodName[0]))
+            {
+                return;
+            }
 
             var diagnostic = Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), methodName);
             context.ReportDiagnostic(diagnostic);

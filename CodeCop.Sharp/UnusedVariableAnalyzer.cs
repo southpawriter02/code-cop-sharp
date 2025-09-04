@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace CodeCop.Sharp
 {
@@ -25,68 +24,36 @@ namespace CodeCop.Sharp
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(AnalyzeCodeBody, SyntaxKind.MethodDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeCodeBody, SyntaxKind.ParenthesizedLambdaExpression);
-            context.RegisterSyntaxNodeAction(AnalyzeCodeBody, SyntaxKind.SimpleLambdaExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
         }
 
-        private void AnalyzeCodeBody(SyntaxNodeAnalysisContext context)
+        private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
-            var body = GetBody(context.Node);
+            var methodDeclaration = (MethodDeclarationSyntax)context.Node;
+            DataFlowAnalysis dataFlowAnalysis = null;
 
-            if (body == null)
+            if (methodDeclaration.Body != null)
+            {
+                dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(methodDeclaration.Body);
+            }
+            else if (methodDeclaration.ExpressionBody != null)
+            {
+                dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(methodDeclaration.ExpressionBody.Expression);
+            }
+
+            if (dataFlowAnalysis == null || !dataFlowAnalysis.Succeeded)
             {
                 return;
             }
 
-            var dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(body);
-
-            if (!dataFlowAnalysis.Succeeded)
+            foreach (var variable in dataFlowAnalysis.VariablesDeclared)
             {
-                return;
-            }
-
-            var unusedVariables = dataFlowAnalysis.VariablesDeclared.Except(dataFlowAnalysis.ReadInside);
-
-            foreach (var variable in unusedVariables)
-            {
-                if (variable.Name.StartsWith("_"))
+                if (!dataFlowAnalysis.ReadInside.Contains(variable))
                 {
-                    continue;
+                    var diagnostic = Diagnostic.Create(Rule, variable.Locations[0], variable.Name);
+                    context.ReportDiagnostic(diagnostic);
                 }
-
-                // If we are analyzing a method, and the unused variable is declared inside a lambda,
-                // we skip it. The analysis of the lambda itself will report it.
-                // This prevents duplicate diagnostics.
-                if (context.Node is MethodDeclarationSyntax)
-                {
-                    var variableLocation = variable.Locations.First();
-                    var containingLambda = variableLocation.SourceTree.GetRoot(context.CancellationToken)
-                        .FindNode(variableLocation.SourceSpan)
-                        .AncestorsAndSelf().OfType<LambdaExpressionSyntax>().FirstOrDefault();
-
-                    if (containingLambda != null)
-                    {
-                        continue;
-                    }
-                }
-
-                var diagnostic = Diagnostic.Create(Rule, variable.Locations.First(), variable.Name);
-                context.ReportDiagnostic(diagnostic);
             }
-        }
-
-        private SyntaxNode GetBody(SyntaxNode node)
-        {
-            if (node is MethodDeclarationSyntax method)
-            {
-                return (SyntaxNode)method.Body ?? method.ExpressionBody?.Expression;
-            }
-            if (node is LambdaExpressionSyntax lambda)
-            {
-                return lambda.Body;
-            }
-            return null;
         }
     }
 }

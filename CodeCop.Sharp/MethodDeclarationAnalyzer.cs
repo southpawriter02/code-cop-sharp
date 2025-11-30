@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System;
 using System.Collections.Immutable;
 
 namespace CodeCop.Sharp
@@ -12,7 +13,7 @@ namespace CodeCop.Sharp
         public const string DiagnosticId = "CCS0001";
 
         private static readonly LocalizableString Title = "Method name should be in PascalCase";
-        private static readonly LocalizableString MessageFormat = "Method name '{0}' should be in PascalCase";
+        private static readonly LocalizableString MessageFormat = "Method name '{0}' should be in PascalCase. Consider: '{1}'";
         private static readonly LocalizableString Description = "Method names should be in PascalCase.";
         private const string Category = "Naming";
 
@@ -37,8 +38,22 @@ namespace CodeCop.Sharp
                 return;
             }
 
-            var diagnostic = Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), methodName);
+            var suggestedName = ToPascalCase(methodName);
+            var diagnostic = Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), methodName, suggestedName);
             context.ReportDiagnostic(diagnostic);
+        }
+
+        /// <summary>
+        /// Converts a method name to PascalCase.
+        /// </summary>
+        public static string ToPascalCase(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return name;
+            }
+
+            return char.ToUpperInvariant(name[0]) + name.Substring(1);
         }
     }
 }

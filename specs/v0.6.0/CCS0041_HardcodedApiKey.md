@@ -72,10 +72,10 @@ The analyzer detects variables containing these keywords (case-insensitive):
 
 | Provider | Pattern | Example |
 |----------|---------|---------|
-| AWS Access Key | `AKIA[0-9A-Z]{16}` | AKIAIOSFODNN7EXAMPLE |
-| AWS Secret Key | `[A-Za-z0-9/+=]{40}` with context | wJalrXUtnFEMI/K7MDENG/... |
+| AWS Access Key | `AKIA[0-9A-Z]{16}` | AKIAXXXXXXXXXXXXXXXX |
+| AWS Secret Key | `[A-Za-z0-9/+=]{40}` with context | XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX |
 | Azure Storage | `[A-Za-z0-9+/]{86}==` | AccountKey pattern |
-| Stripe | `sk_live_[0-9a-zA-Z]{24}` | sk_live_4eC39HqLyjWDarjtT1zdp7dc |
+| Stripe | `sk_live_[0-9a-zA-Z]{24}` | sk_live_xxxxxxxxxxxxxxxxxxxxxxxx |
 | GitHub PAT | `ghp_[0-9a-zA-Z]{36}` | ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
 | Slack Token | `xox[baprs]-[0-9a-zA-Z-]+` | xoxb-123456-abcdef |
 
@@ -122,16 +122,16 @@ var apiKey = "";
 
 ```csharp
 // CCS0041 - hardcoded API key in field
-private string _apiKey = "sk_live_4eC39HqLyjWDarjtT1zdp7dc";
+private string _apiKey = "sk_live_xxxxxxxxxxxxxxxxxxxxxxxx";
 
 // CCS0041 - hardcoded API key in constant
-private const string ApiKey = "AIzaSyDaGmWKa4JsXZ-HjGw7ISLn_3namBGewQe";
+private const string ApiKey = "AIzaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 // CCS0041 - hardcoded AWS access key
-var awsAccessKey = "AKIAIOSFODNN7EXAMPLE";
+var awsAccessKey = "AKIAXXXXXXXXXXXXXXXX";
 
 // CCS0041 - hardcoded AWS secret key
-var awsSecretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+var awsSecretKey = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 // CCS0041 - hardcoded bearer token
 private string _bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
@@ -152,7 +152,7 @@ var config = new ApiConfig
 };
 
 // CCS0041 - hardcoded Stripe key
-var stripe = new StripeClient("sk_live_4eC39HqLyjWDarjtT1zdp7dc");
+var stripe = new StripeClient("sk_live_xxxxxxxxxxxxxxxxxxxxxxxx");
 ```
 
 ---
@@ -421,13 +421,13 @@ namespace CodeCop.Sharp.Analyzers.Security
 | Test Name | Input | Expected |
 |-----------|-------|----------|
 | ApiKeyField | `private string _apiKey = "abc123xyz789";` | CCS0041 |
-| AccessKeyField | `private string accessKey = "AKIAIOSFODNN7EXAMPLE";` | CCS0041 |
-| AwsSecretKey | `var secretKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYKEY";` | CCS0041 |
-| StripeKey | `const string key = "sk_live_4eC39HqLyjWDarj";` | CCS0041 |
+| AccessKeyField | `private string accessKey = "AKIAXXXXXXXXXXXXXXXX";` | CCS0041 |
+| AwsSecretKey | `var secretKey = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";` | CCS0041 |
+| StripeKey | `const string key = "sk_live_xxxxxxxxxxxxxxxx";` | CCS0041 |
 | GitHubToken | `var token = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";` | CCS0041 |
 | BearerToken | `var bearerToken = "eyJhbGciOiJIUzI1...";` | CCS0041 |
 | ClientSecret | `var clientSecret = "dGhpcyBpcyBhIHNlY3JldA==";` | CCS0041 |
-| GoogleApiKey | `var key = "AIzaSyDaGmWKa4JsXZ-HjGw7ISLn_3namBGe";` | CCS0041 |
+| GoogleApiKey | `var key = "AIzaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";` | CCS0041 |
 | SlackToken | `var slack = "xoxb-123456789012-abcdefghij";` | CCS0041 |
 | ObjectInitializer | `new Config { ApiKey = "real_key" }` | CCS0041 |
 

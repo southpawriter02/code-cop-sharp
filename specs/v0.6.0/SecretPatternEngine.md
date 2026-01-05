@@ -649,8 +649,8 @@ public class SecretPatternEngineTests
     }
 
     [Theory]
-    [InlineData("AKIAIOSFODNN7EXAMPLE", "AWS")]
-    [InlineData("sk_live_4eC39HqLyjWDarjtT1zdp7dc", "Stripe")]
+    [InlineData("AKIAXXXXXXXXXXXXXXXX", "AWS")]
+    [InlineData("sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx", "Stripe")]
     [InlineData("ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "GitHub")]
     public void MatchValue_ProviderPatterns(string value, string expectedProvider)
     {

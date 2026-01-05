@@ -11,17 +11,17 @@
 
 ## Version Summary
 
-| Version | Theme | Analyzers | Key Deliverables |
-|---------|-------|-----------|------------------|
-| v0.2.0 | Foundation | 5 | CodeCop.Core runner, 4 naming analyzers |
-| v0.3.0 | Command Line | 10 | CodeCop.CLI, 5 code style analyzers |
-| v0.4.0 | Quality Gate | 17 | SARIF output, 7 code quality analyzers |
-| v0.5.0 | Best Practices | 24 | XML output, 7 async/LINQ/null analyzers |
-| v0.6.0 | Secure | 30 | Basic security patterns, 6 security analyzers |
-| v0.7.0 | Visual | 30 | CodeCop.GUI (AvaloniaUI desktop app) |
-| v0.8.0 | Integrated | 30 | Visual Studio 2022 extension (VSIX) |
-| v0.9.0 | Polish | 30 | Documentation, testing, optimization |
-| v1.0.0 | Release | 30 | Production-ready release |
+| Version | Theme | Analyzers | Key Deliverables | Specs |
+|---------|-------|-----------|------------------|-------|
+| v0.2.0 | Foundation | 5 | CodeCop.Core runner, 4 naming analyzers | [specs/v0.2.0/](../specs/v0.2.0/) |
+| v0.3.0 | Command Line | 10 | CodeCop.CLI, 5 code style analyzers | [specs/v0.3.0/](../specs/v0.3.0/) |
+| v0.4.0 | Quality Gate | 17 | SARIF output, 7 code quality analyzers | [specs/v0.4.0/](../specs/v0.4.0/) |
+| v0.5.0 | Best Practices | 24 | XML output, 7 async/LINQ/null analyzers | [specs/v0.5.0/](../specs/v0.5.0/) |
+| v0.6.0 | Secure | 30 | Basic security patterns, 6 security analyzers | [specs/v0.6.0/](../specs/v0.6.0/) |
+| v0.7.0 | Visual | 30 | CodeCop.GUI (AvaloniaUI desktop app) | [specs/v0.7.0/](../specs/v0.7.0/) |
+| v0.8.0 | Integrated | 30 | Visual Studio 2022 extension (VSIX) | [specs/v0.8.0/](../specs/v0.8.0/) |
+| v0.9.0 | Polish | 30 | Documentation, testing, optimization | [specs/v0.9.0/](../specs/v0.9.0/) |
+| v1.0.0 | Release | 30 | Production-ready release | [specs/v1.0.0/](../specs/v1.0.0/) |
 
 ---
 
@@ -63,6 +63,8 @@
 - Add .editorconfig rule configuration support
 - Create shared test utilities
 
+**Detailed Specs**: [specs/v0.2.0/](../specs/v0.2.0/)
+
 ---
 
 ### v0.3.0 - "Command Line"
@@ -96,6 +98,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - JSON formatter
 - Exit codes (0=success, 1=errors, 2=warnings)
 
+**Detailed Specs**: [specs/v0.3.0/](../specs/v0.3.0/)
+
 ---
 
 ### v0.4.0 - "Quality Gate"
@@ -118,6 +122,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - SARIF output format for GitHub Actions
 - Configurable thresholds for length/complexity rules
 - `[SuppressMessage]` attribute support
+
+**Detailed Specs**: [specs/v0.4.0/](../specs/v0.4.0/)
 
 ---
 
@@ -142,6 +148,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - Rule documentation generator (Markdown)
 - Library vs application mode detection
 
+**Detailed Specs**: [specs/v0.5.0/](../specs/v0.5.0/)
+
 ---
 
 ### v0.6.0 - "Secure"
@@ -165,6 +173,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - `.codecopignore` file support
 - Security-specific severity level
 
+**Detailed Specs**: [specs/v0.6.0/](../specs/v0.6.0/)
+
 ---
 
 ### v0.7.0 - "Visual"
@@ -186,6 +196,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - FluentAvalonia (modern styling)
 - CommunityToolkit.Mvvm (MVVM)
 
+**Detailed Specs**: [specs/v0.7.0/](../specs/v0.7.0/)
+
 ---
 
 ### v0.8.0 - "Integrated"
@@ -203,6 +215,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - NuGet: `CodeCop.Sharp` (analyzer package)
 - VS Marketplace: VSIX installer
 - Global tool: `dotnet tool install -g CodeCop.CLI`
+
+**Detailed Specs**: [specs/v0.8.0/](../specs/v0.8.0/)
 
 ---
 
@@ -227,6 +241,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 - GUI basic automation tests
 - Performance benchmarks
 
+**Detailed Specs**: [specs/v0.9.0/](../specs/v0.9.0/)
+
 ---
 
 ### v1.0.0 - "Release"
@@ -239,6 +255,8 @@ codecop analyze --target ./MySolution.sln --fail-on-error
 | CodeCop.CLI | `dotnet tool install -g CodeCop.CLI` |
 | CodeCop.GUI | MSI, DMG, AppImage installers |
 | CodeCop.VS | Visual Studio Marketplace |
+
+**Detailed Specs**: [specs/v1.0.0/](../specs/v1.0.0/)
 
 ---
 
